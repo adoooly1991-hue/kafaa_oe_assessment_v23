@@ -1,0 +1,171 @@
+
+assumptions:
+  currency: "SAR"
+  labor_cost_per_hour: 50.0
+  cost_of_capital_pct: 12.0
+  avg_monthly_volume_units: 10000.0
+
+profiles:
+  metal_fabrication:
+    label: "Metal Fabrication"
+    benchmarks:
+      supplier_otd_pct: 95
+      inventory_accuracy_pct: 98
+      smed_changeover_min: 10
+      fpy_pct: 98
+      rework_pct: 2
+      unplanned_downtime_pct: 8
+      otif_pct: 95
+      forecast_accuracy_pct: 85
+      fg_aging_pct: 5
+      loading_time_min: 40
+      inventory_turns: 8
+      inventory_days: 45
+  electronics_assembly:
+    label: "Electronics Assembly"
+    benchmarks:
+      supplier_otd_pct: 97
+      inventory_accuracy_pct: 99
+      smed_changeover_min: 5
+      fpy_pct: 99.5
+      rework_pct: 0.5
+      unplanned_downtime_pct: 5
+      otif_pct: 97
+      forecast_accuracy_pct: 90
+      fg_aging_pct: 3
+      loading_time_min: 30
+      inventory_turns: 12
+      inventory_days: 30
+  injection_molding:
+    label: "Plastics Injection Molding"
+    benchmarks:
+      supplier_otd_pct: 95
+      inventory_accuracy_pct: 98
+      smed_changeover_min: 10
+      fpy_pct: 98.5
+      rework_pct: 1
+      unplanned_downtime_pct: 7
+      otif_pct: 96
+      forecast_accuracy_pct: 88
+      fg_aging_pct: 4
+      loading_time_min: 35
+      inventory_turns: 10
+      inventory_days: 36
+  food_beverage:
+    label: "Food & Beverage"
+    benchmarks:
+      supplier_otd_pct: 96
+      inventory_accuracy_pct: 99
+      smed_changeover_min: 8
+      fpy_pct: 99
+      rework_pct: 0.8
+      unplanned_downtime_pct: 6
+      otif_pct: 97
+      forecast_accuracy_pct: 90
+      fg_aging_pct: 3
+      loading_time_min: 30
+      inventory_turns: 20
+      inventory_days: 18
+  process_industrial:
+    label: "Process / Industrial"
+    benchmarks:
+      supplier_otd_pct: 95
+      inventory_accuracy_pct: 98
+      smed_changeover_min: 15
+      fpy_pct: 98
+      rework_pct: 1.5
+      unplanned_downtime_pct: 6
+      otif_pct: 96
+      forecast_accuracy_pct: 88
+      fg_aging_pct: 5
+      loading_time_min: 45
+      inventory_turns: 8
+      inventory_days: 45
+
+# Generic countermeasures (short list for demo)
+countermeasures:
+  defects:
+    - {id: 5why_top_defects, name: "Run 5-Why on top 3 defects", desc: "Daily defect review, define root causes and containment.", impact_pct: [10,20], effort: low, pre: "Top-N Pareto", kpi: "FPY, Scrap %"}
+    - {id: poka_yoke, name: "Add Poka‑Yoke at source", desc: "Error-proof critical steps; add sensors/fixtures.", impact_pct: [15,35], effort: medium, pre: "Design support", kpi: "DPPM"}
+  waiting:
+    - {id: smed, name: "SMED: internal→external setup", desc: "Pre‑stage tools, quick clamps, checklists.", impact_pct: [15,30], effort: low, pre: "Setup study", kpi: "Changeover time"}
+  inventory:
+    - {id: kanban, name: "Kanban & supermarkets", desc: "Right‑size buffers, FEFO/FIFO lanes.", impact_pct: [10,25], effort: medium, pre: "ABC segmentation", kpi: "Inventory days"}
+  transportation:
+    - {id: milk_run, name: "Milk‑run with fixed routes", desc: "Time‑boxed material trains to cut forklift trips.", impact_pct: [10,20], effort: medium, pre: "Route design", kpi: "Travel time"}
+  motion:
+    - {id: 5s, name: "5S & point‑of‑use storage", desc: "Organize tools/paperwork at the station.", impact_pct: [8,18], effort: low, pre: "Team buy‑in", kpi: "CT, Ergonomics"}
+  overprocessing:
+    - {id: std_work, name: "Standard work & first‑piece approval", desc: "Clarify what 'good' looks like; remove re‑checks.", impact_pct: [8,18], effort: low, pre: "SOPs", kpi: "CT, Rework"}
+  overproduction:
+    - {id: takt_release, name: "Takt‑based release & heijunka", desc: "Level mix; release to takt, not MRP push.", impact_pct: [10,25], effort: medium, pre: "Demand analysis", kpi: "WIP hours"}
+  safety:
+    - {id: ergo_fixes, name: "Ergonomic fixes & handling audit", desc: "Lift tables, POU containers, walkway separation.", impact_pct: [5,15], effort: low, pre: "HSE support", kpi: "Incidents"}
+
+# Sector-specific countermeasures
+countermeasures_profiles:
+  metal_fabrication:
+    defects:
+      - {id: weld_param_window, name: "Lock welding parameter window", desc: "Standardize WPS; verify with gauges.", impact_pct: [10,25], effort: medium, pre: "WPS draft", kpi: "FPY, Rework"}
+      - {id: fixture_poka, name: "Fixtures for hole/length poka‑yoke", desc: "Locators/stops to prevent mis‑drill/mis‑cut.", impact_pct: [15,35], effort: medium, pre: "Fixture shop", kpi: "DPPM"}
+    waiting:
+      - {id: smed_clamp, name: "Quick‑release clamps & tool carts", desc: "Convert bolts; pre‑stage carts.", impact_pct: [10,30], effort: low, pre: "Setup study", kpi: "Changeover time"}
+    transportation:
+      - {id: u_cell_weld, name: "Trial U‑cell (weld+grind)", desc: "Co‑locate, reduce forklift moves.", impact_pct: [10,20], effort: high, pre: "Layout review", kpi: "Travel time"}
+    motion:
+      - {id: gravity_racks, name: "Gravity racks for blanks", desc: "Point‑of‑use with rollers.", impact_pct: [8,18], effort: low, pre: "Rack source", kpi: "CT, Ergonomics"}
+
+prioritization:
+  name: "Kafaa PACE"
+  kpi_badge: {min_tracked: 4, label: "Kafaa Readiness Badge"}
+  critical_objectives:
+    - {id: prod, name: "Production/Throughput", weight: 1.0}
+    - {id: qual, name: "Quality", weight: 1.0}
+    - {id: cost, name: "Cost", weight: 1.0}
+    - {id: delv, name: "Delivery/OTIF", weight: 1.0}
+    - {id: safe, name: "Safety", weight: 1.0}
+    - {id: mora, name: "People & Morale", weight: 0.8}
+  objective_to_waste:
+    prod: {waiting: 0.35, overprocessing: 0.2, motion: 0.2, transportation: 0.15, inventory: 0.1}
+    qual: {defects: 0.6, overprocessing: 0.2, waiting: 0.1, motion: 0.1}
+    cost: {defects: 0.3, waiting: 0.2, inventory: 0.2, transportation: 0.15, overprocessing: 0.15}
+    delv: {inventory: 0.35, waiting: 0.25, transportation: 0.2, overproduction: 0.2}
+    safe: {safety: 0.8, motion: 0.2}
+    mora: {motion: 0.4, overprocessing: 0.2, waiting: 0.2, safety: 0.2}
+  edge_metrics:
+    defects: {key: "fpy_pct", higher_is_better: true, unit: "%"}
+    waiting: {key: "smed_changeover_min", higher_is_better: false, unit: "min"}
+    inventory: {key: "inventory_days", higher_is_better: false, unit: "days"}
+    transportation: {key: "loading_time_min", higher_is_better: false, unit: "min"}
+    overproduction: {key: "fg_aging_pct", higher_is_better: false, unit: "%"}
+
+i18n:
+  pace:
+    en:
+      title: "Kafaa PACE — Prioritization Engine"
+      present: "Present — baseline signals"
+      advantage: "Advantage — estimated annual benefit"
+      critical: "Critical — choose what matters most now"
+      edge: "Edge — combined priority (top themes)"
+      badge: "Kafaa Readiness Badge progress"
+      objectives:
+        prod: "Production/Throughput"
+        qual: "Quality"
+        cost: "Cost"
+        delv: "Delivery/OTIF"
+        safe: "Safety"
+        mora: "People & Morale"
+    ar:
+      title: "باقة كفاءة — محرك ترتيب الأولويات"
+      present: "الوضع الحالي — مؤشرات الأساس"
+      advantage: "الميزة — العائد السنوي المتوقع"
+      critical: "المهم — اختر ما يهم الآن"
+      edge: "الأفضلية — المواضيع ذات الأولوية"
+      badge: "شعار الجاهزية من كفاءة"
+      objectives:
+        prod: "الإنتاج/الطاقة"
+        qual: "الجودة"
+        cost: "التكلفة"
+        delv: "التسليم/الالتزام"
+        safe: "السلامة"
+        mora: "الأفراد والمعنويات"
