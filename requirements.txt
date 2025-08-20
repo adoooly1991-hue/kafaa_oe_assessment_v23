@@ -1,5 +1,8 @@
 streamlit==1.37.1
 pandas==2.2.2
-pyyaml==6.0.2
+numpy==1.26.4          # cp311 wheel available
 python-pptx==0.6.23
-numpy==1.26.4
+lxml==5.2.2            # prebuilt wheel, avoids long compile
+Pillow==10.4.0
+XlsxWriter==3.2.0
+PyYAML==6.0.2
